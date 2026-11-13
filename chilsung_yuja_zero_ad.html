@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>칠성사이다 유자 제로 30s</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;900&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#00a651;--deep:#004d2c;--yuja:#ffd21f;--yuja2:#ffb400;--ice:#f2f5f6;--white:#fff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden;font-family:'Noto Sans KR',sans-serif}
+  #wrap{position:fixed;inset:0;display:grid;place-items:center}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden;transform-origin:center;
+    background:radial-gradient(ellipse at 50% 115%,#f4f7f8 0%,#9aa5ab 30%,#2b3034 65%,#0b0c0d 100%)}
+  .layer{position:absolute;inset:0}
+  .bubble{position:absolute;border-radius:50%;border:3px solid rgba(255,255,255,.8);
+    background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.9) 0 12%,rgba(255,255,255,.08) 30%,transparent 70%)}
+  .w{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;color:#fff;
+    font-family:'Black Han Sans',sans-serif;line-height:1;opacity:0;text-shadow:0 10px 40px rgba(0,0,0,.45)}
+  .en{font-family:'Archivo Black',sans-serif;letter-spacing:-.02em}
+  .ch{display:inline-block;opacity:0}
+  #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+  #yujaBg{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#fff3a8 0%,#ffd21f 45%,#ffab00 100%);clip-path:circle(0% at 50% 50%)}
+  #start{position:fixed;inset:0;display:grid;place-items:center;background:rgba(10,10,10,.88);z-index:9;cursor:pointer;color:#fff;
+    font-family:'Black Han Sans';font-size:44px;text-align:center;gap:12px}
+  #start small{display:block;font-family:'Noto Sans KR';font-size:18px;opacity:.7;margin-top:14px}
+  #bar{position:fixed;left:0;bottom:0;height:4px;background:var(--yuja);width:0;z-index:8}
+  svg{overflow:visible}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+  <div id="yujaBg"></div>
+  <div class="layer" id="bubbles"></div>
+  <div class="layer" id="fx"></div>
+  <div class="layer" id="txt"></div>
+  <div class="layer" id="prod" style="opacity:0">
+    <!-- 캔 일러스트 (실제 패키지: 실버 캔·블랙 패널·옐로 스타·Chilsung 로고) -->
+    <svg id="can" width="420" height="760" viewBox="0 0 420 760" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 40px 60px rgba(0,0,0,.45))">
+      <defs>
+        <linearGradient id="body" x1="0" x2="1">
+          <stop offset="0" stop-color="#0b7a3e"/><stop offset=".18" stop-color="#2fd07a"/><stop offset=".32" stop-color="#e9fff2"/>
+          <stop offset=".45" stop-color="#18b560"/><stop offset=".85" stop-color="#056b33"/><stop offset="1" stop-color="#034a23"/>
+        </linearGradient>
+        <linearGradient id="metal" x1="0" x2="1">
+          <stop offset="0" stop-color="#8a9a94"/><stop offset=".3" stop-color="#f4f8f6"/><stop offset=".6" stop-color="#b9c6c0"/><stop offset="1" stop-color="#6c7a74"/>
+        </linearGradient>
+        <linearGradient id="yb" x1="0" x2="1">
+          <stop offset="0" stop-color="#e09a00"/><stop offset=".3" stop-color="#ffe866"/><stop offset="1" stop-color="#d48a00"/>
+        </linearGradient>
+      </defs>
+      <path d="M60 70 Q60 40 100 34 L320 34 Q360 40 360 70 L360 82 L60 82Z" fill="url(#metal)"/>
+      <ellipse cx="210" cy="36" rx="110" ry="14" fill="#cfd8d4"/>
+      <clipPath id="canClip"><path d="M40 110 Q40 82 60 82 L360 82 Q380 82 380 110 L380 670 Q380 700 360 704 L60 704 Q40 700 40 670Z"/></clipPath>
+      <linearGradient id="silver" x1="0" x2="1">
+        <stop offset="0" stop-color="#8d969b"/><stop offset=".14" stop-color="#e9edef"/><stop offset=".26" stop-color="#fff"/>
+        <stop offset=".42" stop-color="#cfd5d8"/><stop offset=".7" stop-color="#e3e7e9"/><stop offset=".9" stop-color="#a3abb0"/><stop offset="1" stop-color="#6e777c"/>
+      </linearGradient>
+      <linearGradient id="starG" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffd23a"/><stop offset=".55" stop-color="#f7b500"/><stop offset="1" stop-color="#e79a00"/>
+      </linearGradient>
+      <linearGradient id="shade" x1="0" x2="1">
+        <stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".2" stop-color="#000" stop-opacity="0"/>
+        <stop offset=".3" stop-color="#fff" stop-opacity=".35"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/>
+        <stop offset=".85" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".4"/>
+      </linearGradient>
+      <g clip-path="url(#canClip)">
+        <rect x="40" y="82" width="340" height="622" fill="url(#silver)"/>
+        <rect x="40" y="82" width="340" height="34" fill="#111"/>
+        <text x="210" y="106" text-anchor="middle" font-family="Archivo Black" font-size="17" fill="#fff" letter-spacing="2">ZERO CALORIE · ZERO CALORIE · ZERO</text>
+        <path d="M40 116 L245 116 Q150 220 160 330 L40 430Z" fill="#111"/>
+        <g id="miniStars"></g>
+        <polygon id="bigStar" fill="url(#starG)" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+        <g id="canYuja"></g>
+        <g transform="rotate(-14 215 330)">
+          <text x="270" y="338" text-anchor="middle" font-family="Archivo Black" font-size="74" fill="#fff" stroke="#1a1a1a" stroke-width="9" paint-order="stroke" transform="skewX(-12)" letter-spacing="-3">Chilsung</text>
+          <text x="262" y="396" text-anchor="middle" font-family="Archivo Black" font-size="38" fill="#fff" stroke="#1a1a1a" stroke-width="6" paint-order="stroke" letter-spacing="10">CIDER</text>
+        </g>
+        <text x="225" y="548" text-anchor="middle" font-family="Archivo Black" font-size="46" fill="#111" letter-spacing="2">ZERO</text>
+        <text x="225" y="595" text-anchor="middle" font-family="Archivo Black" font-size="46" fill="#111" letter-spacing="2">YUJA</text>
+        <text x="225" y="652" text-anchor="middle" font-family="Noto Sans KR" font-weight="900" font-size="22" fill="#555">칠성사이다 제로 유자</text>
+        <rect x="40" y="82" width="340" height="622" fill="url(#shade)"/>
+      </g>
+      <path d="M50 704 L370 704 Q360 730 320 734 L100 734 Q60 730 50 704Z" fill="url(#metal)"/>
+    </svg>
+  </div>
+  <div id="flash"></div>
+</div></div>
+<div id="bar"></div>
+<div id="start"><div>▶ 클릭해서 재생<small>칠성사이다 유자 제로 · 30s · 사운드 ON</small></div></div>
+
+<script>
+const stage=document.getElementById('stage'),txt=document.getElementById('txt'),fx=document.getElementById('fx'),
+      bubbles=document.getElementById('bubbles'),prod=document.getElementById('prod'),flash=document.getElementById('flash'),
+      yujaBg=document.getElementById('yujaBg'),can=document.getElementById('can');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);Object.assign(stage.style,{position:'absolute',left:'50%',top:'50%',transform:`translate(-50%,-50%) scale(${s})`})}
+addEventListener('resize',fit);fit();
+
+/* 캔 패키지 디테일: 별·유자 좌표 생성 */
+function starPts(cx,cy,R,r){let p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,k=i%2?r:R;p.push((cx+k*Math.cos(a)).toFixed(1)+','+(cy+k*Math.sin(a)).toFixed(1))}return p.join(' ')}
+document.getElementById('bigStar').setAttribute('points',starPts(225,330,230,95));
+document.getElementById('miniStars').innerHTML=[[78,150,16],[118,128,12],[84,196,11],[130,172,14],[70,236,8],[112,214,7],[150,140,6]]
+  .map(([x,y,s])=>`<polygon points="${starPts(x,y,s,s*.42)}" fill="#fff"/>`).join('');
+document.getElementById('canYuja').innerHTML=[[335,250,62],[355,368,44]].map(([x,y,R])=>{let seg='';const k=R*.82;
+  for(let i=0;i<8;i++){const a1=(i*45-17)*Math.PI/180,a2=(i*45+17)*Math.PI/180;
+    seg+=`<path d="M${x} ${y} L${x+k*Math.cos(a1)} ${y+k*Math.sin(a1)} A${k} ${k} 0 0 1 ${x+k*Math.cos(a2)} ${y+k*Math.sin(a2)}Z" fill="#ffc83a"/>`}
+  return `<circle cx="${x}" cy="${y}" r="${R}" fill="#f29a00"/><circle cx="${x}" cy="${y}" r="${R*.9}" fill="#fff1b8"/>${seg}`}).join('');
+
+/* ---------- 비주얼 헬퍼 ---------- */
+const E={out:'cubic-bezier(.16,1,.3,1)',back:'cubic-bezier(.34,1.8,.5,1)',in:'cubic-bezier(.7,0,.84,0)'};
+function word(html,{size=200,x=0,y=0,color='#fff',cls='',rot=0}={}){
+  const d=document.createElement('div');d.className='w '+cls;d.innerHTML=html;
+  Object.assign(d.style,{fontSize:size+'px',color,marginLeft:x+'px',marginTop:y+'px',rotate:rot+'deg'});
+  txt.appendChild(d);return d}
+function splitWord(text,o={}){const d=word([...text].map(c=>`<span class="ch">${c===' '?'&nbsp;':c}</span>`).join(''),o);d.style.opacity=1;return d}
+function slam(el,dur=600){return el.animate([{opacity:0,transform:'translate(-50%,-50%) scale(3)',filter:'blur(20px)'},
+  {opacity:1,transform:'translate(-50%,-50%) scale(.94)',filter:'blur(0)',offset:.6},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],
+  {duration:dur,easing:E.out,fill:'forwards'})}
+function popChars(el,stagger=50,from='y'){[...el.children].forEach((c,i)=>c.animate([
+  {opacity:0,transform:from==='y'?'translateY(120%) rotate(12deg)':'scale(0) rotate(-30deg)'},{opacity:1,transform:'none'}],
+  {duration:700,delay:i*stagger,easing:E.back,fill:'forwards'}))}
+function exit(el,kind='up',dur=400){const k={up:'translate(-50%,-180%)',down:'translate(-50%,80%)',left:'translate(-250%,-50%)',zoom:'translate(-50%,-50%) scale(6)'}[kind];
+  const a=el.animate([{},{opacity:0,transform:k,filter:'blur(8px)'}],{duration:dur,easing:E.in,fill:'forwards'});a.onfinish=()=>el.remove()}
+function doFlash(a=.9){flash.animate([{opacity:a},{opacity:0}],{duration:350,easing:'ease-out'})}
+function shake(){stage.animate([{translate:'0 0'},{translate:'14px -10px'},{translate:'-12px 8px'},{translate:'6px 4px'},{translate:'0 0'}],{duration:280})}
+function burst(n=40,cx=960,cy=540,color='#fff'){for(let i=0;i<n;i++){const b=document.createElement('div');b.className='bubble';
+  const r=8+Math.random()*34,a=Math.random()*Math.PI*2,d=300+Math.random()*700;
+  Object.assign(b.style,{width:r+'px',height:r+'px',left:cx+'px',top:cy+'px',borderColor:color});fx.appendChild(b);
+  b.animate([{transform:'translate(-50%,-50%) scale(0)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(1)`,opacity:0}],
+  {duration:900+Math.random()*700,easing:E.out}).onfinish=()=>b.remove()}}
+let rising=true;
+function riseLoop(){if(!rising)return;const b=document.createElement('div');b.className='bubble';const r=6+Math.random()*46;
+  Object.assign(b.style,{width:r+'px',height:r+'px',left:Math.random()*1920+'px',top:'1120px'});bubbles.appendChild(b);
+  const sway=(Math.random()-.5)*160;b.animate([{transform:'translate(0,0)'},{transform:`translate(${sway}px,-1300px)`}],
+  {duration:2600+Math.random()*3000,easing:'cubic-bezier(.4,0,.8,.6)'}).onfinish=()=>b.remove();setTimeout(riseLoop,40+Math.random()*80)}
+function yujaSlice(x,y,s=1){const d=document.createElement('div');d.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${300*s}px;height:${300*s}px;transform:translate(-50%,-50%)`;
+  let seg='';for(let i=0;i<10;i++){const a=i*36;seg+=`<path d="M150 150 L${150+118*Math.cos((a-15)*Math.PI/180)} ${150+118*Math.sin((a-15)*Math.PI/180)} A118 118 0 0 1 ${150+118*Math.cos((a+15)*Math.PI/180)} ${150+118*Math.sin((a+15)*Math.PI/180)}Z" fill="#ffe14d" stroke="#fff6c4" stroke-width="5"/>`}
+  d.innerHTML=`<svg viewBox="0 0 300 300" width="100%" height="100%"><circle cx="150" cy="150" r="146" fill="#ffb400"/><circle cx="150" cy="150" r="132" fill="#fff6c4"/>${seg}<circle cx="150" cy="150" r="14" fill="#fff6c4"/></svg>`;
+  fx.appendChild(d);return d}
+
+/* ---------- 오디오: BGM(WebAudio 신스) + 효과음 + 음성 ---------- */
+let ac,master;const BPM=124,B=60/BPM;
+function initAudio(){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.55;
+  const comp=ac.createDynamicsCompressor();master.connect(comp).connect(ac.destination)}
+function noiseBuf(sec=1){const b=ac.createBuffer(1,ac.sampleRate*sec,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b}
+function kick(t,g=1){const o=ac.createOscillator(),v=ac.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);
+  v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+.4);o.connect(v).connect(master);o.start(t);o.stop(t+.4)}
+function hat(t,g=.18,len=.05){const s=ac.createBufferSource();s.buffer=noiseBuf(.2);const f=ac.createBiquadFilter();f.type='highpass';f.frequency.value=8000;
+  const v=ac.createGain();v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+len);s.connect(f).connect(v).connect(master);s.start(t);s.stop(t+.2)}
+function clap(t,g=.35){const s=ac.createBufferSource();s.buffer=noiseBuf(.3);const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=1500;
+  const v=ac.createGain();v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+.18);s.connect(f).connect(v).connect(master);s.start(t);s.stop(t+.3)}
+function pluck(t,freq,g=.12,len=.25,type='square'){const o=ac.createOscillator(),f=ac.createBiquadFilter(),v=ac.createGain();o.type=type;o.frequency.value=freq;
+  f.type='lowpass';f.frequency.setValueAtTime(5000,t);f.frequency.exponentialRampToValueAtTime(400,t+len);
+  v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+len);o.connect(f).connect(v).connect(master);o.start(t);o.stop(t+len+.05)}
+function pad(t,freqs,len,g=.04){freqs.forEach(fr=>[0,7].forEach(det=>{const o=ac.createOscillator(),v=ac.createGain();o.type='sawtooth';o.frequency.value=fr;o.detune.value=det;
+  const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1800;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+.3);v.gain.linearRampToValueAtTime(0,t+len);
+  o.connect(f).connect(v).connect(master);o.start(t);o.stop(t+len+.1)}))}
+function fizz(t,len=1.6,g=.35){const s=ac.createBufferSource();s.buffer=noiseBuf(len);const f=ac.createBiquadFilter();f.type='highpass';f.frequency.value=3000;
+  const v=ac.createGain();v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+len);s.connect(f).connect(v).connect(master);s.start(t)}
+function pop(t){const o=ac.createOscillator(),v=ac.createGain();o.type='sine';o.frequency.setValueAtTime(400,t);o.frequency.exponentialRampToValueAtTime(1400,t+.06);
+  v.gain.setValueAtTime(.4,t);v.gain.exponentialRampToValueAtTime(.001,t+.12);o.connect(v).connect(master);o.start(t);o.stop(t+.15)}
+function riser(t,len){const s=ac.createBufferSource();s.buffer=noiseBuf(len);const f=ac.createBiquadFilter();f.type='bandpass';f.Q.value=4;
+  f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(9000,t+len);const v=ac.createGain();v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.3,t+len);
+  s.connect(f).connect(v).connect(master);s.start(t);s.stop(t+len)}
+function scheduleMusic(t0){
+  // 코드: F#m7 - D - A - E (상큼한 업비트 하우스)
+  const prog=[[185,220,277,330],[147,185,220,294],[220,277,330,440],[165,208,247,330]];
+  const arp=[[740,880,1109,880],[587,740,880,740],[880,1109,1319,1109],[659,831,988,831]];
+  const bars=Math.floor(29.5/(B*4));
+  for(let bar=0;bar<bars;bar++){const tb=t0+bar*B*4,c=bar%4,intro=bar<2,outro=bar>=bars-1;
+    pad(tb,prog[c],B*4,intro?.03:.045);
+    for(let q=0;q<4;q++){const tq=tb+q*B;
+      if(!intro)kick(tq,outro?.6:1);
+      if(!intro&&(q===1||q===3))clap(tq);
+      hat(tq+B/2,.2);if(!intro)hat(tq+B/4,.06);
+      pluck(tq,prog[c][0]/2,.18,.22,'sawtooth');pluck(tq+B/2,prog[c][0]/2,.14,.18,'sawtooth');
+      if(bar>=2){pluck(tq,arp[c][q],.06,.18);pluck(tq+B/2,arp[c][(q+2)%4]*(bar>=4?2:1),.04,.14,'triangle')}
+    }}
+}
+
+function speak(text,rate=1,pitch=1.1){if(!('speechSynthesis' in window))return;const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=rate;u.pitch=pitch;
+  const v=speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang)&&/Heami|SunHi|Yuna|female|여/i.test(v.name))||speechSynthesis.getVoices().find(v=>/ko/i.test(v.lang));
+  if(v)u.voice=v;speechSynthesis.speak(u)}
+
+/* ---------- 타임라인 (초) ---------- */
+const T=[];const at=(s,fn)=>T.push([s,fn]);
+
+// 0.0 - 치익! 오프닝
+at(0.0,()=>{riseLoop()});
+at(0.3,()=>{const a=word('치—익',{size:260});slam(a,900);setTimeout(()=>exit(a,'zoom',500),1500)});
+at(2.0,()=>{doFlash();shake();burst(70)});
+// 2.2 - 키네틱: 톡! 쏘는
+at(2.2,()=>{const a=splitWord('톡!',{size:420,x:-420,rot:-8});popChars(a,80,'s');setTimeout(()=>exit(a,'left',350),1400)});
+at(2.9,()=>{const a=splitWord('쏘는',{size:300,x:300,y:60,color:'#f2f5f6'});popChars(a,90);setTimeout(()=>exit(a,'up',350),900)});
+at(4.1,()=>{const a=word('<span class="en">SPARKLING</span>',{size:230});a.style.webkitTextStroke='4px #fff';a.style.color='transparent';
+  a.animate([{opacity:0,letterSpacing:'1em'},{opacity:1,letterSpacing:'-.02em'}],{duration:900,easing:E.out,fill:'forwards'});setTimeout(()=>exit(a,'down',400),1700)});
+// 6.0 - 유자 전환
+at(6.0,()=>{yujaBg.animate([{clipPath:'circle(0% at 50% 50%)'},{clipPath:'circle(80% at 50% 50%)'}],{duration:800,easing:E.out,fill:'forwards'})});
+at(6.2,()=>{burst(50,960,540,'#fff6c4');[[300,250,.8],[1650,300,1.1],[250,850,1.2],[1620,820,.7]].forEach(([x,y,s],i)=>{const y2=yujaSlice(x,y,s);
+  y2.animate([{transform:'translate(-50%,-50%) scale(0) rotate(-180deg)'},{transform:'translate(-50%,-50%) scale(1) rotate(0)'}],{duration:900,delay:i*90,easing:E.back,fill:'forwards'});
+  y2.animate([{rotate:'0deg'},{rotate:'360deg'}],{duration:9000,iterations:Infinity});setTimeout(()=>exit(y2,'zoom',500),5600)})});
+at(6.6,()=>{const a=splitWord('유자',{size:520,color:'#fff'});a.style.textShadow='0 20px 0 #e09a00,0 30px 60px rgba(150,80,0,.4)';popChars(a,140,'s');setTimeout(()=>exit(a,'up',400),2400)});
+at(9.2,()=>{const a=splitWord('상큼함이',{size:200,y:-120,color:'#5a3a00'});popChars(a,60);setTimeout(()=>exit(a,'left',350),2200)});
+at(9.9,()=>{const a=splitWord('터진다!',{size:300,y:110,color:'#fff'});a.style.textShadow='0 14px 0 #e09a00';popChars(a,70,'s');setTimeout(()=>{shake();burst(60,960,600,'#fff')},450);setTimeout(()=>exit(a,'zoom',450),2000)});
+// 12.0 - ZERO 섹션
+at(12.0,()=>{yujaBg.animate([{clipPath:'circle(80% at 50% 50%)'},{clipPath:'circle(0% at 50% 50%)'}],{duration:600,easing:E.in,fill:'forwards'});doFlash(.6)});
+at(12.4,()=>{const a=word('<span class="en">100</span>',{size:600});a.style.opacity=1;const lbl=word('kcal',{size:90,cls:'en',y:300});lbl.style.opacity=.85;
+  let n=100;const iv=setInterval(()=>{n=Math.max(0,n-Math.ceil(n/6)-1);a.firstChild.textContent=n;if(n===0){clearInterval(iv);a.style.color='#ffd21f';slam(a,500);shake();burst(80)}},70);
+  setTimeout(()=>{exit(a,'zoom',500);exit(lbl,'down',400)},2600)});
+at(15.2,()=>{['Z','E','R','O'].forEach((c,i)=>{const a=word(c,{size:440,cls:'en',x:(i-1.5)*330});a.style.opacity=1;
+  a.animate([{transform:'translate(-50%,200%) rotate(40deg)',opacity:0},{transform:'translate(-50%,-50%)',opacity:1}],{duration:700,delay:i*110,easing:E.back,fill:'forwards'});
+  setTimeout(()=>exit(a,i%2?'down':'up',400),1900+i*40)})});
+at(16.0,()=>{const a=word('칼로리는 비우고, 청량함은 그대로',{size:64,y:330,color:'#f2f5f6'});a.animate([{opacity:0,letterSpacing:'.5em'},{opacity:1,letterSpacing:'0'}],{duration:700,easing:E.out,fill:'forwards'});setTimeout(()=>exit(a,'down',300),1200)});
+// 17.6 - 제품 리빌
+at(17.4,()=>{riser(ac.currentTime,1)});
+at(18.3,()=>{doFlash();burst(90);prod.style.opacity=1;
+  can.animate([{transform:'translate(-50%,40%) rotate(-25deg) scale(.6)',filter:'blur(10px)'},{transform:'translate(-50%,-50%) rotate(-6deg) scale(1)',filter:'blur(0)'}],{duration:1000,easing:E.back,fill:'forwards'});
+  setTimeout(()=>can.animate([{transform:'translate(-50%,-50%) rotate(-6deg) scale(1)'},{transform:'translate(-50%,-53%) rotate(-3deg) scale(1.02)'}],{duration:1600,direction:'alternate',iterations:Infinity,easing:'ease-in-out'}),1000)});
+at(19.0,()=>{[['맑게',-600,-200],['깨끗하게',600,-60],['상큼하게',-560,160]].forEach(([s,x,y],i)=>setTimeout(()=>{const a=splitWord(s,{size:150,x,y,color:i===2?'#ffd21f':'#fff'});popChars(a,60);setTimeout(()=>exit(a,'down',350),3600-i*700)},i*700))});
+// 23.0 - 엔드 & 슬로건
+at(23.0,()=>{can.animate([{left:'50%'},{left:'72%'}],{duration:900,easing:E.out,fill:'forwards'})});
+at(23.4,()=>{const a=splitWord('맑고 깨끗한',{size:120,x:-330,y:-150,color:'#f2f5f6'});popChars(a,55)});
+at(24.4,()=>{const a=splitWord('칠성사이다',{size:210,x:-330,y:20});popChars(a,80,'s')});
+at(25.8,()=>{const a=word('유자 <span class="en">ZERO</span>',{size:140,x:-330,y:190,color:'#ffd21f'});slam(a,700);burst(40,620,740,'#ffd21f')});
+at(29.2,()=>{rising=false;stage.animate([{filter:'brightness(1)'},{filter:'brightness(0)'}],{duration:800,fill:'forwards'})});
+
+// 오디오 큐 (초)
+const AQ=[[0.25,t=>fizz(t,1.8,.4)],[2.0,t=>{pop(t);kick(t,1.2)}],[2.2,pop],[2.9,pop],[6.0,t=>fizz(t,.8,.3)],[6.6,pop],[6.75,pop],[9.9,pop],[10.35,t=>kick(t,1.2)],
+  [14.0,pop],[18.3,t=>{fizz(t,1.2,.35);kick(t,1.3)}],[24.4,pop],[25.8,pop]];
+
+let t0=null;
+// 새로고침 없이 처음 상태로 되돌림 (미리보기 창 등 reload가 막힌 환경 대응)
+function reset(){[txt,fx,bubbles].forEach(el=>el.innerHTML='');
+  [yujaBg,can,stage,flash].forEach(el=>el.getAnimations().forEach(a=>a.cancel()));
+  prod.style.opacity=0;rising=true;document.getElementById('bar').style.width=0;
+  if(ac)ac.close();if('speechSynthesis' in window)speechSynthesis.cancel()}
+function play(){document.getElementById('start').remove();reset();initAudio();const now=ac.currentTime+.1;t0=performance.now()+100;
+  scheduleMusic(now);AQ.forEach(([s,fn])=>fn(now+s));
+  T.forEach(([s,fn])=>setTimeout(fn,100+s*1000));
+  // 내레이션 (브랜드 슬로건 포함)
+  setTimeout(()=>speak('톡 쏘는 상큼함.',1.05,1.2),2600);
+  setTimeout(()=>speak('유자, 터진다!',1.05,1.25),9600);
+  setTimeout(()=>speak('칼로리는 제로.',1,1.15),15400);
+  setTimeout(()=>speak('맑고 깨끗한, 칠성사이다. 유자 제로.',.95,1.1),23500);
+  const bar=document.getElementById('bar');(function tick(){const p=Math.min(1,(performance.now()-t0)/30000);bar.style.width=p*100+'%';if(p<1)requestAnimationFrame(tick)})();
+  setTimeout(()=>{const r=document.createElement('div');r.id='start';r.innerHTML='<div>↻ 다시 보기</div>';r.onclick=play;document.body.appendChild(r)},30200)}
+speechSynthesis&&speechSynthesis.getVoices();
+document.getElementById('start').onclick=play;
+</script>
+</body>
+</html>
